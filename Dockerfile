@@ -1,12 +1,12 @@
-# Dockerfile optimizado para Back4App (versión simplificada)
-# ISO Standards Games - FastAPI Application
+# Dockerfile para ISO Standards Games Multi-Server
+# Ejecuta QualityQuest, RequirementRally y UsabilityUniverse
 
 FROM python:3.9-slim
 
 # Información del mantenedor
 LABEL maintainer="UFV Software Quality <sqs@ufv.es>"
-LABEL description="ISO Standards Educational Games - FastAPI Application"
-LABEL version="1.0"
+LABEL description="ISO Standards Educational Games - Multi-Server Application"
+LABEL version="2.0"
 
 # Establecer directorio de trabajo
 WORKDIR /app
@@ -16,7 +16,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
-# Instalar dependencias del sistema necesarias
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     curl \
     gcc \
@@ -25,20 +25,20 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Copiar requirements.txt y instalar dependencias Python
+# Copiar requirements.txt e instalar dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar código fuente de la aplicación
+# Copiar todo el código fuente
 COPY . .
 
-# Crear directorio de base de datos SQLite
-RUN mkdir -p /app/data && \
-    chmod 755 /app/data
+# Crear directorios necesarios
+RUN mkdir -p /app/data /var/log && \
+    chmod 755 /app/data /var/log
 
-# Exponer puerto 8000 para Back4App
-EXPOSE 8000
+# Exponer puertos principales
+EXPOSE 8000 8001 8003
 
 # Variables de entorno para producción
 ENV DEBUG=false
@@ -49,10 +49,9 @@ ENV OLLAMA_BASE_URL=http://localhost:11434
 ENV OLLAMA_MODEL=qwen3
 ENV DEFAULT_LOCALE=en
 
-# Health check para Back4App
+# Health check para el servidor principal
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/api/health || exit 1
+    CMD curl -f http://localhost:8000/ || exit 1
 
-# Comando para ejecutar la aplicación
-# Usar script de inicio que configura dinámicamente el servidor
-CMD ["python", "start_server.py"]
+# Ejecutar el script multi-servidor
+CMD ["python", "multi_server_startup.py"]
