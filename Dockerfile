@@ -54,5 +54,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/api/health || exit 1
 
 # Comando para ejecutar la aplicación
-# Usar el servidor principal que incluye todos los juegos
-CMD ["python", "llm_game_server.py"]
+# Usar script de inicio que configura dinámicamente el servidor
+CMD ["python", "start_server.py"]
