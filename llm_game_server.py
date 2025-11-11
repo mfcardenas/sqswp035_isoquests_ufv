@@ -963,8 +963,10 @@ Return exactly 5 scenarios in JSON format."""
         import uvicorn
         print("Uvicorn imported successfully")
         
-        print("Starting server on port 8001...")
-        uvicorn.run(app, host="127.0.0.1", port=8001, log_level="info")
+        # Para Back4App: usar puerto dinámico
+        port = int(os.environ.get('PORT', 8000))
+        print(f"Starting server on port {port}...")
+        uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 except Exception as e:
     print(f"❌ Error during startup: {e}")

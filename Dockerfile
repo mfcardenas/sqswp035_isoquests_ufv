@@ -54,4 +54,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/api/health || exit 1
 
 # Comando para ejecutar la aplicación
-CMD ["python", "-m", "uvicorn", "iso_standards_games.__main__:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+# Usar el servidor principal que incluye todos los juegos
+CMD ["python", "llm_game_server.py"]

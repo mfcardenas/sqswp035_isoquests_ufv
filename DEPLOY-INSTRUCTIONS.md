@@ -82,18 +82,38 @@ DEFAULT_LOCALE=en
 Después del despliegue exitoso:
 
 - **🏠 Aplicación Principal**: `https://tu-app.back4app.io/`
-- **⚕️ Health Check**: `https://tu-app.back4app.io/api/health`
-- **🎮 Games API**: `https://tu-app.back4app.io/api/v1/games/`
-- **📚 Documentación**: `https://tu-app.back4app.io/docs`
+- **⚕️ Health Check**: `https://tu-app.back4app.io/api/health` (si existe)
+- **🎮 QualityQuest API**: `https://tu-app.back4app.io/api/v1/games/`
+- **📚 RequirementRally**: `https://tu-app.back4app.io/requirement-rally`
+- **🎯 RequirementRally API**: `https://tu-app.back4app.io/rally/`
+- **🌟 UsabilityUniverse**: `https://tu-app.back4app.io/usability-universe`
+- **💡 UsabilityUniverse API**: `https://tu-app.back4app.io/universe/`
+- **📋 Documentación**: `https://tu-app.back4app.io/docs`
 
 ## 🎮 FUNCIONALIDADES
 
 ### Juegos Educativos Incluidos:
 1. **QualityQuest** - ISO/IEC 25010 (8 atributos de calidad)
-2. **ReqRally** - ISO/IEC/IEEE 29148 (especificación de requisitos)
+2. **ReqRally** - ISO/IEC/IEEE 29148 (especificación de requisitos)  
 3. **UXplorer** - ISO 9241 (principios de usabilidad)
 4. **StandardShowdown** - Integración de los tres estándares
 5. **QualityArchitect** - Aplicación práctica en diseño de software
+
+### Arquitectura del Servidor:
+- **🎯 Servidor Principal**: `llm_game_server.py` (puerto 8000)
+  - Incluye TODOS los juegos en un solo servidor
+  - RequirementRally endpoints: `/rally/*`
+  - UsabilityUniverse endpoints: `/universe/*`
+  - QualityQuest endpoints: `/api/*`
+- **🗂️ Bases de Datos JSON**: 
+  - `quality_scenarios_db.py` - Escenarios de calidad
+  - `requirements_scenarios_db.py` - Escenarios de requisitos
+  - `usability_scenarios_db.py` - Escenarios de usabilidad
+
+### Servidores Independientes (NO usados en Back4App):
+- ❌ `requirement_rally_server.py` - Solo para desarrollo local
+- ❌ `usability_universe_server.py` - Solo para desarrollo local
+- ❌ `iso_standards_games/__main__.py` - Framework base
 
 ### Características Técnicas:
 - ✅ **FastAPI + React** - Backend robusto con frontend moderno
@@ -140,10 +160,14 @@ docker run -p 8000:8000 iso-games
 **Problema**: `The option "--no-dev" does not exist`
 **Solución**: Eliminado Poetry, usando requirements.txt directamente
 
+### ✅ Error Servidores Múltiples Resuelto:
+**Problema**: Servidores independientes en puertos diferentes
+**Solución**: Usar solo `llm_game_server.py` que incluye todos los juegos
+
 ### Si Build Falla:
 ✓ Verificar que `requirements.txt` esté presente
-✓ Verificar que `Dockerfile` no contenga comandos Poetry
-✓ Verificar sintaxis Python en todos los archivos
+✓ Verificar que todos los archivos `*_scenarios_db.py` estén incluidos
+✓ Verificar sintaxis Python en `llm_game_server.py`
 ✓ Revisar logs de build en Back4App Dashboard
 
 ### Si Container No Inicia:
