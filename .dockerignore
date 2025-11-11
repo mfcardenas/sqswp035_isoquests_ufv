@@ -1,0 +1,98 @@
+# Archivos y directorios a excluir del contexto Docker
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.pytest_cache/
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Poetry
+.venv/
+
+# Node.js (si hay frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+tmp/
+temp/
+.tmp/
+
+# Archivos de configuración local
+.env.local
+.env.production.local
+.env.development.local
+
+# Bases de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de backup
+*.bak
+*_BACKUP.py
+*_COMPLETED.py
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Documentación y desarrollo
+docs/
+*.md
+
+# Scripts de test y desarrollo
+test_*.py
+startup.py
+test_deployment.py
+*_test.py
+debug_*.py
+analyze_*.py
+validate_*.py
+
+# Archivos específicos del proyecto
+requirements_scenarios*.json
+usability_scenarios.json
+complete_scenarios.py
+update_bilingual_scenarios.py

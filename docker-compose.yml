@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  iso-games-app:
+    build: .
+    container_name: iso-games-app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=true
+      - APP_NAME=ISO Standards Games
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=qwen3
+      - DATABASE_URL=sqlite:///./data/iso_standards_games.db
+      - DEFAULT_LOCALE=en
+    volumes:
+      - ./data:/app/data  # Persistir base de datos SQLite
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    driver: bridge
