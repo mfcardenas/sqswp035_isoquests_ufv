@@ -1,0 +1,24 @@
+# Dependencias principales para ISO Standards Games
+# Generado desde pyproject.toml para Back4App
+
+# FastAPI y servidor web
+fastapi>=0.109.0,<1.0.0
+uvicorn[standard]>=0.27.0,<1.0.0
+
+# Cliente HTTP para LLM integrations
+httpx>=0.26.0,<1.0.0
+
+# Internacionalización
+python-i18n>=0.3.9,<1.0.0
+
+# Pydantic para validación de datos
+pydantic>=2.5.0,<3.0.0
+pydantic-settings>=2.1.0,<3.0.0
+
+# Templates y formularios
+jinja2>=3.1.2,<4.0.0
+python-multipart>=0.0.6,<1.0.0
+
+# Dependencias adicionales para estabilidad
+email-validator>=2.0.0
+python-dotenv>=1.0.0

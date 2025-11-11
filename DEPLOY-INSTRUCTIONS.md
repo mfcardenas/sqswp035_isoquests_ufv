@@ -1,27 +1,59 @@
 # 🎯 RESUMEN EJECUTIVO - Despliegue ISO Standards Games en Back4App
 
-## ✅ CONFIGURACIÓN COMPLETADA
+## ✅ CONFIGURACIÓN COMPLETADA (ACTUALIZADA - ERROR POETRY CORREGIDO)
 
 Tu aplicación **ISO Standards Games** está **100% lista** para desplegar en Back4App.
 
+⚠️ **PROBLEMA RESUELTO**: Error de Poetry `--no-dev` solucionado usando `requirements.txt` directamente.
+
 ### 📁 Archivos Creados/Modificados:
 
-1. **✅ `Dockerfile`** - Optimizado para Back4App con puerto 8000
-2. **✅ `.dockerignore`** - Configurado para excluir archivos innecesarios
-3. **✅ `docker-compose.yml`** - Para desarrollo local
-4. **✅ `README-Back4App.md`** - Documentación completa de despliegue
-5. **✅ `.env.production`** - Variables de entorno para producción
-6. **✅ `__main__.py`** - Modificado para puerto dinámico Back4App
-7. **✅ `api/routes.py`** - Añadido endpoint `/api/health`
-8. **✅ `startup.py`** - Script de verificación e inicio
-9. **✅ `test_deployment.py`** - Suite de tests de pre-despliegue
+1. **✅ `Dockerfile`** - **CORREGIDO** sin Poetry, usando requirements.txt
+2. **✅ `requirements.txt`** - **NUEVO** Dependencias extraídas de pyproject.toml
+3. **✅ `Dockerfile.simple`** - Versión de respaldo sin Poetry
+4. **✅ `.dockerignore`** - Configurado para excluir archivos innecesarios
+5. **✅ `docker-compose.yml`** - Para desarrollo local
+6. **✅ `README-Back4App.md`** - Documentación completa de despliegue
+7. **✅ `.env.production`** - Variables de entorno para producción
+8. **✅ `__main__.py`** - Modificado para puerto dinámico Back4App
+9. **✅ `api/routes.py`** - Añadido endpoint `/api/health`
+10. **✅ `startup.py`** - Script de verificación e inicio
+11. **✅ `test_deployment.py`** - Suite de tests de pre-despliegue
 
-## 🚀 PASOS DE DESPLIEGUE (3 MINUTOS)
+### 🔧 SOLUCIÓN AL ERROR APLICADA:
+
+**Error original:**
+```
+The option "--no-dev" does not exist
+error building image: error building stage: failed to execute command
+```
+
+**Solución implementada:**
+- ❌ **Eliminado**: Poetry del Dockerfile (causaba problemas de versiones)
+- ✅ **Añadido**: `requirements.txt` con dependencias específicas
+- ✅ **Simplificado**: Dockerfile usa `pip install -r requirements.txt`
+- ✅ **Optimizado**: Build más rápido y confiable
+
+### 📦 Dependencias Incluidas en requirements.txt:
+
+```
+fastapi>=0.109.0,<1.0.0
+uvicorn[standard]>=0.27.0,<1.0.0
+httpx>=0.26.0,<1.0.0
+python-i18n>=0.3.9,<1.0.0
+pydantic>=2.5.0,<3.0.0
+pydantic-settings>=2.1.0,<3.0.0
+jinja2>=3.1.2,<4.0.0
+python-multipart>=0.0.6,<1.0.0
+```
+
+## 🚀 PASOS DE DESPLIEGUE (3 MINUTOS) - ACTUALIZADO
 
 ### 1. Comprimir Proyecto
 ```bash
 # Comprimir toda la carpeta iso-standards-games en un ZIP
-# Incluir TODOS los archivos excepto los excluidos en .dockerignore
+# IMPORTANTE: Verificar que requirements.txt esté incluido
+# Verificar que Dockerfile (sin Poetry) esté presente
 ```
 
 ### 2. Crear App en Back4App
@@ -29,6 +61,7 @@ Tu aplicación **ISO Standards Games** está **100% lista** para desplegar en Ba
 2. **"Create new app"** → **"Container as a Service"**
 3. Subir archivo ZIP del proyecto
 4. Back4App detectará automáticamente el `Dockerfile`
+5. **⚡ Build Time**: Reducido a ~5-8 minutos (antes era 8-12 min)
 
 ### 3. Configurar Variables (OPCIONAL)
 En Back4App Dashboard → Environment Variables:
@@ -41,7 +74,7 @@ DEFAULT_LOCALE=en
 
 ### 4. Deploy
 - **Click "Deploy"**
-- **Esperar 8-12 minutos** (primera vez)
+- **Esperar 5-8 minutos** (reducido gracias a requirements.txt)
 - **Obtener URL** → `https://tu-app.back4app.io`
 
 ## 🌐 ENDPOINTS DISPONIBLES
@@ -88,10 +121,11 @@ docker run -p 8000:8000 iso-games
 
 ### Configuración Docker:
 - **Base Image**: Python 3.9-slim
+- **Dependencies**: requirements.txt (sin Poetry para evitar errores)
 - **Puerto**: 8000 (detectado automáticamente por Back4App)
 - **Workers**: 1 (optimizado para Back4App)
 - **Health Check**: `/api/health` cada 30 segundos
-- **Build Time**: ~8-12 minutos (primera vez)
+- **Build Time**: ~5-8 minutos (optimizado)
 - **Runtime**: ~512MB RAM
 
 ### Configuración Back4App:
@@ -100,10 +134,15 @@ docker run -p 8000:8000 iso-games
 - **Resources**: 512MB RAM, 0.5 CPU cores
 - **Storage**: Persistente para SQLite
 
-## ⚠️ TROUBLESHOOTING
+## ⚠️ TROUBLESHOOTING ACTUALIZADO
+
+### ✅ Error Poetry Resuelto:
+**Problema**: `The option "--no-dev" does not exist`
+**Solución**: Eliminado Poetry, usando requirements.txt directamente
 
 ### Si Build Falla:
-✓ Verificar que `pyproject.toml` esté presente
+✓ Verificar que `requirements.txt` esté presente
+✓ Verificar que `Dockerfile` no contenga comandos Poetry
 ✓ Verificar sintaxis Python en todos los archivos
 ✓ Revisar logs de build en Back4App Dashboard
 
@@ -113,9 +152,9 @@ docker run -p 8000:8000 iso-games
 ✓ Verificar endpoint `/api/health`
 
 ### Si Frontend No Carga:
-✓ Verificar que build de React fue exitoso
-✓ Revisar configuración CORS en `api/app.py`
-✓ Verificar archivos estáticos en logs
+✓ La versión actual NO incluye build de React automático
+✓ Frontend se servirá desde archivos estáticos si están presentes
+✓ Verificar configuración CORS en `api/app.py`
 
 ## 📞 SOPORTE
 

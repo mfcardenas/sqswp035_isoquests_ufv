@@ -1,11 +1,11 @@
-# Dockerfile optimizado para Back4App (versión simplificada)
-# ISO Standards Games - FastAPI Application
+# Dockerfile alternativo para Back4App (sin Poetry)
+# ISO Standards Games - FastAPI Application with React Frontend
 
 FROM python:3.9-slim
 
 # Información del mantenedor
 LABEL maintainer="UFV Software Quality <sqs@ufv.es>"
-LABEL description="ISO Standards Educational Games - FastAPI Application"
+LABEL description="ISO Standards Educational Games - FastAPI Application (Simple)"
 LABEL version="1.0"
 
 # Establecer directorio de trabajo
@@ -48,10 +48,6 @@ ENV LLM_PROVIDER=ollama
 ENV OLLAMA_BASE_URL=http://localhost:11434
 ENV OLLAMA_MODEL=qwen3
 ENV DEFAULT_LOCALE=en
-
-# Health check para Back4App
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/api/health || exit 1
 
 # Comando para ejecutar la aplicación
 CMD ["python", "-m", "uvicorn", "iso_standards_games.__main__:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
