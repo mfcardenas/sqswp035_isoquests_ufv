@@ -1,12 +1,12 @@
-# Dockerfile para ISO Standards Games Multi-Server
-# Ejecuta QualityQuest, RequirementRally y UsabilityUniverse
+# Dockerfile para ISO Standards Games - Proyecto Original Intacto
+# Solo ejecuta QualityQuest usando el método oficial del proyecto
 
 FROM python:3.9-slim
 
 # Información del mantenedor
 LABEL maintainer="UFV Software Quality <sqs@ufv.es>"
-LABEL description="ISO Standards Educational Games - Multi-Server Application"
-LABEL version="2.0"
+LABEL description="ISO Standards Games - QualityQuest (Proyecto Original)"
+LABEL version="1.0.0"
 
 # Establecer directorio de trabajo
 WORKDIR /app
@@ -16,12 +16,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema mínimas
 RUN apt-get update && apt-get install -y \
     curl \
-    gcc \
-    g++ \
-    make \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -30,28 +27,23 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar todo el código fuente
+# Copiar COMPLETAMENTE el código fuente (sin modificar nada)
 COPY . .
 
-# Crear directorios necesarios
-RUN mkdir -p /app/data /var/log && \
-    chmod 755 /app/data /var/log
+# Crear directorio de datos
+RUN mkdir -p /app/data && \
+    chmod 755 /app/data
 
-# Exponer puertos principales
-EXPOSE 8000 8001 8003
+# Exponer puerto estándar Back4App
+EXPOSE 8000
 
-# Variables de entorno para producción
+# Variables de entorno básicas para Back4App
 ENV DEBUG=false
-ENV APP_NAME="ISO Standards Games"
 ENV DATABASE_URL=sqlite:///./data/iso_standards_games.db
-ENV LLM_PROVIDER=ollama
-ENV OLLAMA_BASE_URL=http://localhost:11434
-ENV OLLAMA_MODEL=qwen3
-ENV DEFAULT_LOCALE=en
 
-# Health check para el servidor principal
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/ || exit 1
+# Health check básico
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD curl -f http://localhost:8000/api/health || exit 1
 
-# Ejecutar el script multi-servidor
-CMD ["python", "multi_server_startup.py"]
+# COMANDO OFICIAL DEL PROYECTO - CERO MODIFICACIONES
+CMD ["python", "-m", "iso_standards_games"]
